@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "~> 4.16"
+      version = "4.67.0"
     }
   }
 
@@ -11,7 +11,9 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-west-2"
+  access_key= "access_key"
+  secret_key= "secret_key"
 }
 resource "aws_iam_role" "ec2_role" {
   name = "ec2_role"
@@ -32,8 +34,7 @@ resource "aws_iam_role" "ec2_role" {
 resource "aws_security_group" "allow_all" {
   name = "allow_all_traffic"
   description = "Allow all inbound and outbound traffic"
-  vpc_id = "vpc-084ace9e1b244b017"
-  # Замените на ID вашего VPC
+  vpc_id = "vpc-005574615d4e79055"
 
   ingress {
     description = "All traffic"
@@ -76,9 +77,9 @@ resource "aws_iam_role_policy" "ec2_policy" {
   })
 }
 resource "aws_instance" "app_server" {
-  ami = "ami-0fe472d8a85bc7b0e"
+  ami = "ami-06373f703eb245f45"
   instance_type = "t2.micro"
-  key_name = "key_new6"
+  key_name = "lab-4-5-6"
   security_groups = [
     aws_security_group.allow_all.name]
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
@@ -94,7 +95,6 @@ echo "Starting Docker..."
 sudo systemctl start docker
 sudo systemctl enable docker
 
-# Проверка, что Docker запущен
 echo "Checking Docker status..."
 while ! sudo systemctl is-active --quiet docker
 do
@@ -104,14 +104,14 @@ done
 echo "Docker is running."
 
 echo "Pulling Docker images..."
-sudo docker pull tanasiienkoanastasia/iit-lab4-5
+sudo docker pull tupadzaki/lab4-5
 sudo docker pull containrrr/watchtower
 
 echo "Adding user to Docker group..."
 sudo usermod -a -G docker ec2-user
 
 echo "Running Docker containers..."
-sudo docker run --rm -d --name lab4-5 -p 80:3000 tanasiienkoanastasia/iit-lab4-5
+sudo docker run --rm -d --name lab4-5 -p 80:3000 tupadzaki/lab4-5
 sudo docker run --rm -d \
 --name watchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
