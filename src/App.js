@@ -40,19 +40,6 @@ const App = () => {
           >
             {" "}
           </a>
-          <a
-              target="_blank"
-              href={
-                  "https://reddit.com/submit?title=" +
-                  shareMessage +
-                  "&url=" +
-                  shareLink
-              }
-              className="fa-brands fa-reddit"
-              rel="noopener noreferrer"
-          >
-            {" "}
-          </a>
 
         </div>
       </header>
